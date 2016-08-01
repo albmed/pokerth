@@ -30,6 +30,9 @@
  *****************************************************************************/
 #include "timeoutmsgboximpl.h"
 #include "session.h"
+#include <iostream>
+//#include <boost/thread.hpp>
+//#include <boost/chrono.hpp>
 
 timeoutMsgBoxImpl::timeoutMsgBoxImpl(QMainWindow *parent)
 	: QMessageBox(parent), msgID(NETWORK_TIMEOUT_GENERIC)
@@ -57,11 +60,19 @@ timeoutMsgBoxImpl::~timeoutMsgBoxImpl()
 
 void timeoutMsgBoxImpl::startTimeout()
 {
+	std::cout << "[albmed] Starting timeOut timer... " << std::endl; 
 	//start the real timer
 	realTimer.reset();
 	realTimer.start();
 	timerRefresh();
 	timeOutTimer->start(1000);
+	
+	// Option 1: // Must include <boost/chrono.hpp>, thread.hpp is already included in session.h
+		// boost::this_thread::sleep_for(boost::chrono::milliseconds(150));  
+		// okButton->click(); 
+	
+	// Option 2: If problems, look: http://stackoverflow.com/q/23621257
+		// okButton->animateClick(250);
 }
 
 void timeoutMsgBoxImpl::timerRefresh()
